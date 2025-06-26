@@ -1,0 +1,4 @@
+%syntax-version=1.0.0
+%project=multi-schema-demo_schema3
+
+create_schema3_table 2025-06-26T17:59:11Z Tharun Karimilla <throney@tharun-inspiron-3583> # Create table for schema3
