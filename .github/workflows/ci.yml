@@ -1,0 +1,37 @@
+name: Sqitch Multi-Schema CI/CD
+
+on:
+  push:
+    paths:
+      - '**/*.sql'
+      - '**/sqitch.plan'
+
+jobs:
+  sqitch-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        schema: [schema1, schema2, schema3]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install PostgreSQL Client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Install Sqitch
+        run: |
+          sudo apt-get install -y cpanminus libdbd-pg-perl
+          sudo cpanm Sqitch
+
+      - name: Deploy ${{ matrix.schema }}
+        run: |
+          cd ${{ matrix.schema }}
+          sqitch deploy db:pg://$DB_USER:$DB_PASS@$DB_HOST:$DB_PORT/$DB_NAME
+        env:
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
