@@ -9,6 +9,8 @@ on:
 jobs:
   sqitch-deploy:
     runs-on: ubuntu-latest
+    container:
+      image: sqitch/sqitch:pg
     strategy:
       matrix:
         schema: [schema1, schema2, schema3]
@@ -16,14 +18,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Install PostgreSQL Client
-        run: sudo apt-get update && sudo apt-get install -y postgresql-client
-
-      - name: Install Sqitch
-        run: |
-          sudo apt-get install -y cpanminus libdbd-pg-perl
-          sudo cpanm Sqitch
 
       - name: Deploy ${{ matrix.schema }}
         run: |
