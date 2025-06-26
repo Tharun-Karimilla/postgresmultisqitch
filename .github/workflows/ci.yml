@@ -10,7 +10,7 @@ jobs:
   sqitch-deploy:
     runs-on: ubuntu-latest
     container:
-      image: sqitch/sqitch:pg
+      image: sqitch/sqitch
     strategy:
       matrix:
         schema: [schema1, schema2, schema3]
